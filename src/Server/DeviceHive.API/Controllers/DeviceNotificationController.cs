@@ -7,6 +7,7 @@ using System.Web.Http;
 using DeviceHive.API.Business;
 using DeviceHive.API.Filters;
 using DeviceHive.API.Mapping;
+using DeviceHive.Core.Messaging;
 using DeviceHive.Data.Model;
 using Newtonsoft.Json.Linq;
 using Ninject;
@@ -18,11 +19,14 @@ namespace DeviceHive.API.Controllers
     {
         private ObjectWaiter<DeviceNotification> _notificationWaiter;
         private INotificationManager _notificationManager;
+        private readonly MessageBus _messageBus;
 
-        public DeviceNotificationController(ObjectWaiter<DeviceNotification> notificationWaiter, INotificationManager notificationManager)
+        public DeviceNotificationController(ObjectWaiter<DeviceNotification> notificationWaiter,
+            INotificationManager notificationManager, MessageBus messageBus)
         {
             _notificationWaiter = notificationWaiter;
             _notificationManager = notificationManager;
+            _messageBus = messageBus;
         }
 
         /// <name>query</name>
@@ -88,6 +92,7 @@ namespace DeviceHive.API.Controllers
             DataContext.DeviceNotification.Save(notification);
             _notificationManager.ProcessNotification(notification);
             _notificationWaiter.NotifyChanges(device.ID);
+            _messageBus.Notify(new DeviceNotificationAddedMessage(deviceGuid, notification.ID));
             return Mapper.Map(notification);
         }
 

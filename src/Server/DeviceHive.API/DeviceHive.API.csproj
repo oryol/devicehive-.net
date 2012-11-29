@@ -137,6 +137,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeviceHive.Core\DeviceHive.Core.csproj">
+      <Project>{5E3E2FC9-053A-4A54-AF50-547C915B75EB}</Project>
+      <Name>DeviceHive.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeviceHive.Data\DeviceHive.Data.csproj">
       <Project>{57837E79-1267-4780-99DC-D872FEEC38C8}</Project>
       <Name>DeviceHive.Data</Name>

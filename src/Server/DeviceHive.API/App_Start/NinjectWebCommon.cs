@@ -1,6 +1,7 @@
 using System;
 using System.Web;
 using System.Web.Http;
+using DeviceHive.Core.Messaging;
 using Ninject;
 using Ninject.Web.Common;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -78,6 +79,9 @@ namespace DeviceHive.API
 
             // bind request context
             kernel.Bind<RequestContext>().ToSelf().InRequestScope();
+
+            // bind message bus
+            kernel.Bind<MessageBus>().To<NamedPipeMessageBus>().InSingletonScope();
 
             // bind object waiters
             kernel.Bind<ObjectWaiter<DeviceNotification>>().ToSelf().InSingletonScope();
